@@ -1,12 +1,199 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anato3D | Anatomie humaine</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080d18" />
+  <title>Anato3D | Plateforme d'anatomie interactive</title>
+</head>
+
+<body>
+  <div class="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">A3</div>
+        <div>
+          <h1>Anato<span>3D</span></h1>
+          <p>PLATEFORME D'ANATOMIE INTERACTIVE</p>
+        </div>
+      </div>
+
+      <div class="topbar-status">
+        <span class="status-dot"></span>
+        Environnement 3D actif
+      </div>
+    </header>
+
+    <main class="dashboard">
+
+      <aside class="sidebar">
+        <div class="section-heading">
+          <span class="eyebrow">EXPLORATION</span>
+          <h2>Bibliothèque</h2>
+          <p>Sélectionnez un modèle anatomique.</p>
+        </div>
+
+        <div class="model-list">
+          <button class="model-button active" data-model="skeleton">
+            <span class="model-icon">♙</span>
+            <span><strong>Squelette humain</strong><small>Structure osseuse</small></span>
+            <span class="model-arrow">›</span>
+          </button>
+
+          <button class="model-button" data-model="torso">
+            <span class="model-icon">◉</span>
+            <span><strong>Organes du torse</strong><small>Thorax et abdomen</small></span>
+            <span class="model-arrow">›</span>
+          </button>
+
+          <button class="model-button" data-model="brain">
+            <span class="model-icon">✧</span>
+            <span><strong>Cerveau</strong><small>Système nerveux</small></span>
+            <span class="model-arrow">›</span>
+          </button>
+
+          <button class="model-button" data-model="pancreas">
+            <span class="model-icon">◈</span>
+            <span><strong>Pancréas</strong><small>Système digestif</small></span>
+            <span class="model-arrow">›</span>
+          </button>
+
+          <button class="model-button" data-model="endocrine">
+            <span class="model-icon">✣</span>
+            <span><strong>Glandes endocrines</strong><small>Système hormonal</small></span>
+            <span class="model-arrow">›</span>
+          </button>
+        </div>
+
+        <div class="sidebar-note">
+          <span class="note-icon">i</span>
+          <div>
+            <strong>Conseil d'exploration</strong>
+            <p>Faites glisser la souris pour tourner le modèle et utilisez la molette pour zoomer.</p>
+          </div>
+        </div>
+      </aside>
+
+      <section class="viewer-section">
+        <div class="viewer-header">
+          <div>
+            <span class="eyebrow">LABORATOIRE VIRTUEL</span>
+            <h2 id="model-title">Squelette humain</h2>
+            <p id="model-subtitle">Exploration interactive du système osseux</p>
+          </div>
+
+          <div class="viewer-actions">
+            <button id="reset-camera" class="icon-button" title="Réinitialiser la caméra">↺</button>
+            <button id="zoom-in" class="icon-button" title="Zoom avant">＋</button>
+            <button id="zoom-out" class="icon-button" title="Zoom arrière">－</button>
+          </div>
+        </div>
+
+        <div id="scene-container">
+          <div class="viewer-grid"></div>
+
+          <div id="loading" class="loading">
+            <div class="loader"></div>
+            <strong>Chargement du modèle 3D</strong>
+            <span>Veuillez patienter...</span>
+          </div>
+
+          <div class="viewer-hint">
+            <span class="hint-dot"></span>
+            Cliquez sur une structure pour l'identifier
+          </div>
+        </div>
+
+        <div class="viewer-footer">
+          <span><span class="footer-dot"></span> Modèle interactif</span>
+          <span>Rotation 360° · Zoom · Sélection anatomique</span>
+        </div>
+      </section>
+
+      <aside class="info-panel">
+        <div class="info-heading">
+          <span class="eyebrow">FICHE ANATOMIQUE</span>
+          <h2>Informations</h2>
+        </div>
+
+        <div id="selection-card" class="selection-card">
+          <div class="selection-symbol">◎</div>
+          <span class="selection-label">STRUCTURE SÉLECTIONNÉE</span>
+          <h3 id="info-title">Aucune sélection</h3>
+          <p id="info-description">Cliquez sur une partie du modèle 3D pour afficher ses informations anatomiques.</p>
+        </div>
+
+        <div class="info-block">
+          <span class="info-label">LOCALISATION</span>
+          <p id="organ-location">—</p>
+        </div>
+
+        <div class="info-block">
+          <span class="info-label">FONCTION</span>
+          <p id="organ-function">—</p>
+        </div>
+
+        <div class="info-block">
+          <span class="info-label">RÔLE ANATOMIQUE</span>
+          <p id="organ-role">—</p>
+        </div>
+
+        <div class="info-bottom">
+          <span class="info-label">MODE D'APPRENTISSAGE</span>
+          <p>Explorez les structures et testez vos connaissances avec le quiz.</p>
+        </div>
+      </aside>
+    </main>
+
+    <section class="quiz-section">
+      <div class="quiz-header">
+        <div>
+          <span class="eyebrow">ÉVALUATION DES CONNAISSANCES</span>
+          <h2>Quiz anatomique</h2>
+          <p>Vérifiez votre compréhension du modèle sélectionné.</p>
+        </div>
+
+        <div class="quiz-stats">
+          <div class="stat">
+            <span>QUESTION</span>
+            <strong id="quiz-counter">0/5</strong>
+          </div>
+          <div class="stat">
+            <span>SCORE</span>
+            <strong id="quiz-score">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-progress">
+          <div id="quiz-progress-bar"></div>
+        </div>
+
+        <div class="quiz-content">
+          <div class="question-number" id="question-number">PRÊT À COMMENCER</div>
+          <h3 id="quiz-question">Testez vos connaissances en anatomie.</h3>
+
+          <div id="quiz-options" class="quiz-options"></div>
+
+          <div id="quiz-feedback" class="quiz-feedback"></div>
+
+          <div class="quiz-footer">
+            <span id="quiz-instruction">Sélectionnez une réponse pour continuer.</span>
+            <button id="quiz-next" class="primary-button">Commencer le quiz <span>→</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>Anato3D © 2026</span>
+      <span>Plateforme pédagogique d'anatomie humaine en 3D</span>
+    </footer>
+
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
 </html>
